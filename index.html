@@ -1,107 +1,47 @@
-<!DOCTYPE html>
-<html data-cast-api-enabled="true">
-<head>
-  <title>Launcher</title>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
- 
-  <script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
-  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="//rawgithub.com/Nerdwin15/castreceiverlist/master/jquery.castReceiverList.js"></script>
-</head>
-<body>
-  <div class="container">
-    <div class="btn-group" id="cast-list">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="text">Select a receiver...</span> <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu"></ul>
-    </div>
-    <button class="btn btn-primary unlaunchedOption" onclick="doLaunch()">Start Casting</button>
-    <button class="btn btn-danger launchedOption" onclick="stop()">Stop Casting</button>
- 
-    <ul id="log"></ul>
- 
-    <hr />
- 
-    <div class="launchedOption">
-      <br /><input type="text" id="message" />
-      <button class="btn btn-success" onclick="sendMessage()">Send message</button>
-      <br />
-      <br /><input type="text" id="color" />
-      <button class="btn btn-success" onclick="sendColor()">Set BG Color</button>
-    </div>
-  </div>
-  <script type="text/javascript">
-    var cast_api, cv_activity, receiver;
-    var APP_ID = "25953f43-4105-4ea2-8813-7e5163aed7d6";
- 
-    if (window.cast && window.cast.isAvailable) {
-      initializeApi();
-    } else {
-      window.addEventListener("message", function(event) {
-        if (event.source == window && event.data &&
-            event.data.source == "CastApi" &&
-            event.data.event == "Hello")
-          initializeApi();
-      });
-    };
- 
-    initializeApi = function() {
-      cast_api = new cast.Api();
-      $("#cast-list").castReceiverList({
-        api : cast_api,
-        appId : APP_ID,
-        onSelect : function(r) {
-          receiver = r;
-          $(".unlaunchedOption").removeAttr("disabled");
+<html data-cast-api-enabled='true'>
+
+<title>Hello Chromecast</title>
+
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+<style>body { font-family: 'Droid Sans', Helvetica; text-align: center; margin: 5%; }</style>
+
+<script>
+
+        var cast_api, cv_activity, castAppId = '25953f43-4105-4ea2-8813-7e5163aed7d6';
+
+        if (typeof cast !== 'undefined' && cast.isAvailable) {
+                // Cast is known to be available
+                initializeApi();
+        } else {
+                // Wait for API to post a message to us
+                window.addEventListener('message', function(event) {
+                        if (event.source == window && event.data && 
+                                event.data.source == 'CastApi' && 
+                                event.data.event == 'Hello') {
+                                        initializeApi();
+                                }
+                });
         }
-      });
-    };
-    
-    doLaunch = function() {
-      var request = new window.cast.LaunchRequest(APP_ID, receiver);
-      cast_api.launch(request, onLaunch);
-    };
- 
-    onLaunch = function(activity) {
-      cv_activity = activity;
-      $("#log").append("<li>OnLaunch was fired with activity id: " + activity.activityId + "</li>");
-      $(".launchedOption").show();
-      $(".unlaunchedOption").hide();
-    };
-    
-    sendMessage = function() {
-      var text = $("#message").val();
-      var data = { type : "message", text : text };
-      cast_api.sendMessage(cv_activity.activityId, "com.nerdwin15.demo", data, function(error) {
-        $("#log").append("<li>Sent message of " + text + " to cast</li>");
-      });
-    };
- 
-    sendColor = function() {
-      var color = $("#color").val();
-      var data = { type : "color", color : color };
-      cast_api.sendMessage(cv_activity.activityId, "com.nerdwin15.demo", data, function(error) { 
-        $("#log").append("<li>Sent color change to " + color + " to cast</li>"); 
-      }); 
-    }
-    
-    stop = function() {
-      cast_api.stopActivity(cv_activity.activityId, function() {
-        $("#log").append("<li>Stopped activity with id: " + cv_activity.activityId + "</li>");
-        cv_activity = null;
-      });
-      $(".launchedOption").hide();
-      $(".unlaunchedOption").show();
-    };
 
+        initializeApi = function() { 
+                cast_api = new cast.Api();
+                cast_api.addReceiverListener(castAppId, onReceiverList);
+        };
 
-    $(function() {
-      $(".unlaunchedOption").show();
-      $("button.unlaunchedOption").attr("disabled", "disabled");
-      $(".launchedOption").hide();
-    });
-    
-  </script>
-</body>
-</html>
+        onReceiverList = function(list) {
+                if (list.length > 0) doLaunch(list[0]);
+        };        
+        
+        doLaunch = function(receiver) {
+          var request = new cast.LaunchRequest(castAppId, receiver);                 
+          cast_api.launch(request, onLaunch);
+        };
+        
+        onLaunch = function(activity) {
+                cv_activity = activity.status === 'running' ? activity : null;
+        };        
+</script>
+
+<body>
+        <h1>Hello Chromecast</h1>
+        <h2>Google Cast Sender</h2>
