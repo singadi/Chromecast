@@ -1,92 +1,107 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
-<html>
+<!DOCTYPE html>
+<html data-cast-api-enabled="true">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>Chromecast</title>
-  <meta name="description" content="">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
+  <title>Launcher</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+ 
+  <script type="text/javascript" src="//code.jquery.com/jquery.min.js"></script>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//rawgithub.com/Nerdwin15/castreceiverlist/master/jquery.castReceiverList.js"></script>
 </head>
-
 <body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Chromecast</h1>
-    </header>
-    <div id="container">
-      <p class="tagline"></p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/singadi/Chromecast/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/singadi/Chromecast/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/singadi/Chromecast" class="code">View Chromecast on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </article>
-      </div>
+  <div class="container">
+    <div class="btn-group" id="cast-list">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="text">Select a receiver...</span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu"></ul>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/singadi" class="avatar"><img src="https://2.gravatar.com/avatar/9e06ab3339fd0da31103932930e3248e?d=https%3A%2F%2Fidenticons.github.com%2F823c7332263f6fe7ca4abf1e4f1b4af0.png&amp;r=x&amp;s=60" width="48" height="48"/></a> <a href="https://github.com/singadi">singadi</a> maintains <a href="https://github.com/singadi/Chromecast">Chromecast</a></p>
-
-
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
+    <button class="btn btn-primary unlaunchedOption" onclick="doLaunch()">Start Casting</button>
+    <button class="btn btn-danger launchedOption" onclick="stop()">Stop Casting</button>
+ 
+    <ul id="log"></ul>
+ 
+    <hr />
+ 
+    <div class="launchedOption">
+      <br /><input type="text" id="message" />
+      <button class="btn btn-success" onclick="sendMessage()">Send message</button>
+      <br />
+      <br /><input type="text" id="color" />
+      <button class="btn btn-success" onclick="sendColor()">Set BG Color</button>
+    </div>
   </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/singadi/Chromecast/tarball/master" class="tar">tar</a><a href="https://github.com/singadi/Chromecast/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
+  <script type="text/javascript">
+    var cast_api, cv_activity, receiver;
+    var APP_ID = "25953f43-4105-4ea2-8813-7e5163aed7d6";
+ 
+    if (window.cast && window.cast.isAvailable) {
+      initializeApi();
+    } else {
+      window.addEventListener("message", function(event) {
+        if (event.source == window && event.data &&
+            event.data.source == "CastApi" &&
+            event.data.event == "Hello")
+          initializeApi();
+      });
+    };
+ 
+    initializeApi = function() {
+      cast_api = new cast.Api();
+      $("#cast-list").castReceiverList({
+        api : cast_api,
+        appId : APP_ID,
+        onSelect : function(r) {
+          receiver = r;
+          $(".unlaunchedOption").removeAttr("disabled");
+        }
+      });
+    };
+    
+    doLaunch = function() {
+      var request = new window.cast.LaunchRequest(APP_ID, receiver);
+      cast_api.launch(request, onLaunch);
+    };
+ 
+    onLaunch = function(activity) {
+      cv_activity = activity;
+      $("#log").append("<li>OnLaunch was fired with activity id: " + activity.activityId + "</li>");
+      $(".launchedOption").show();
+      $(".unlaunchedOption").hide();
+    };
+    
+    sendMessage = function() {
+      var text = $("#message").val();
+      var data = { type : "message", text : text };
+      cast_api.sendMessage(cv_activity.activityId, "com.nerdwin15.demo", data, function(error) {
+        $("#log").append("<li>Sent message of " + text + " to cast</li>");
+      });
+    };
+ 
+    sendColor = function() {
+      var color = $("#color").val();
+      var data = { type : "color", color : color };
+      cast_api.sendMessage(cv_activity.activityId, "com.nerdwin15.demo", data, function(error) { 
+        $("#log").append("<li>Sent color change to " + color + " to cast</li>"); 
+      }); 
+    }
+    
+    stop = function() {
+      cast_api.stopActivity(cv_activity.activityId, function() {
+        $("#log").append("<li>Stopped activity with id: " + cv_activity.activityId + "</li>");
+        cv_activity = null;
+      });
+      $(".launchedOption").hide();
+      $(".unlaunchedOption").show();
+    };
 
-  
+
+    $(function() {
+      $(".unlaunchedOption").show();
+      $("button.unlaunchedOption").attr("disabled", "disabled");
+      $(".launchedOption").hide();
+    });
+    
+  </script>
 </body>
 </html>
