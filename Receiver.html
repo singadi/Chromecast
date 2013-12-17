@@ -6,7 +6,7 @@
   <script type="text/javascript" src="https://www.gstatic.com/cast/js/receiver/1.0/cast_receiver.js"></script>
   <script type="text/javascript">
     var receiver = new cast.receiver.Receiver(
-      '25953f43-4105-4ea2-8813-7e5163aed7d6', ["com.nerdwin15.demo"]
+      '25953f43-4105-4ea2-8813-7e5163aed7d6', ["com.singadi.demo"]
     );
 
     var onMessage = function(event) {
@@ -17,9 +17,9 @@
         $("body").css("backgroundColor", message.color);
     };
 
-    channelHandler = new cast.receiver.ChannelHandler('com.nerdwin15.demo');
+    channelHandler = new cast.receiver.ChannelHandler('com.singadi.demo');
     channelHandler.addEventListener(cast.receiver.Channel.EventType.MESSAGE, onMessage.bind(this));
-    channelHandler.addChannelFactory(receiver.createChannelFactory("com.nerdwin15.demo"));
+    channelHandler.addChannelFactory(receiver.createChannelFactory("com.singadi.demo));
 
     receiver.start();
     
